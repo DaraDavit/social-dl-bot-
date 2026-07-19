@@ -81,35 +81,24 @@ async def _download_and_send(update: Update, context: ContextTypes.DEFAULT_TYPE,
     try:
         file_size_mb = result.filesize / (1024 * 1024)
         ext = result.ext
-        is_tiktok = detect_platform(url) == "tiktok"
-        caption = None if is_tiktok else f"{result.title[:200]}"
-
-        if caption and ext in ("mp3", "m4a", "ogg", "wav"):
-            caption = f"🎵 {caption}"
-
-        if caption and file_size_mb > 49:
-            caption += f"\n\n{file_size_mb:.0f}MB"
 
         with open(result.path, "rb") as f:
             if ext in ("mp3", "m4a", "ogg", "wav"):
                 await update.message.reply_audio(
                     audio=f,
-                    title=result.title[:64] if not is_tiktok else None,
-                    caption=caption,
+                    title=result.title[:64],
                     read_timeout=120,
                     write_timeout=120,
                 )
             elif ext in ("jpg", "jpeg", "png", "gif", "webp"):
                 await update.message.reply_photo(
                     photo=f,
-                    caption=caption,
                     read_timeout=120,
                     write_timeout=120,
                 )
             else:
                 await update.message.reply_video(
                     video=f,
-                    caption=caption,
                     read_timeout=120,
                     write_timeout=120,
                     supports_streaming=True,
@@ -142,34 +131,24 @@ async def _download_and_send_callback(query, context: ContextTypes.DEFAULT_TYPE,
     try:
         file_size_mb = result.filesize / (1024 * 1024)
         ext = result.ext
-        is_tiktok = detect_platform(url) == "tiktok"
-        caption = None if is_tiktok else result.title[:200]
-
-        if caption and ext in ("mp3", "m4a", "ogg", "wav"):
-            caption = f"🎵 {caption}"
-        if caption and file_size_mb > 49:
-            caption += f"\n\n{file_size_mb:.0f}MB"
 
         with open(result.path, "rb") as f:
             if ext in ("mp3", "m4a", "ogg", "wav"):
                 await query.message.reply_audio(
                     audio=f,
-                    title=result.title[:64] if not is_tiktok else None,
-                    caption=caption,
+                    title=result.title[:64],
                     read_timeout=120,
                     write_timeout=120,
                 )
             elif ext in ("jpg", "jpeg", "png", "gif", "webp"):
                 await query.message.reply_photo(
                     photo=f,
-                    caption=caption,
                     read_timeout=120,
                     write_timeout=120,
                 )
             else:
                 await query.message.reply_video(
                     video=f,
-                    caption=caption,
                     read_timeout=120,
                     write_timeout=120,
                     supports_streaming=True,

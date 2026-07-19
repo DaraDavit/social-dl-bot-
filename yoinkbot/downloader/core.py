@@ -96,7 +96,7 @@ def download(
                 "/worst"
             )
     elif platform == "pinterest":
-        ydl_opts["format"] = "best"
+        pass  # let yt-dlp auto-detect — pins can be images or video
     else:
         ydl_opts["format"] = "best"
 
